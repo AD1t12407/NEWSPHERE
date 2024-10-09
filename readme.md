@@ -8,8 +8,10 @@
 - **Sentiment Analysis**: Analyze the sentiment of each article's description using the VADER sentiment analysis tool.
 - **Audio Conversion**: Convert article descriptions into audio with options for different languages and voice genders.
 - **User-Friendly Interface**: Easy navigation with a sidebar for category selection.
-<img width="1440" alt="Screenshot 2024-10-09 at 4 13 41 PM (2)" src="https://github.com/user-attachments/assets/aa844bc5-4e43-4581-8ed0-76f416f100b8">
-![Screenshot 2024-10-09 at 4 13 41 PM](https://github.com/user-attachments/assets/6d315543-c88a-4afc-93e4-b985cb85c84c)
+![Screenshot 2024-1<img width="1680" alt="Screenshot 2024-10-09 at 12 21 22 PM" src="https://github.com/user-attachments/assets/6db204ec-7458-45f8-a424-c2cc6d02a99f">
+0-09 at 4 13 41 PM](https://github.com/user-attachments/assets/c6855389-d562-401d-af91-e2ce81d4e378)
+
+
 
 
 ## Technologies Used
