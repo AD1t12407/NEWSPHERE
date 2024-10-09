@@ -4,13 +4,22 @@ import requests
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from datetime import datetime
 from voice import audio, get_supported_languages  # Import necessary functions from voice.py
-from google.cloud import texttospeech 
+from google.cloud import texttospeech
+import json
+from google.oauth2 import service_account
 
 # Set the page layout to wide mode
 st.set_page_config(page_title="NewsSphere", layout="wide")
 
 # Initialize Sentiment Analyzer
 analyzer = SentimentIntensityAnalyzer()
+
+# Load API key and Google credentials from environment variables or Streamlit secrets
+api_key = os.getenv('API_KEY') or st.secrets["API_KEY"]
+
+# Load Google credentials (from secrets if deployed)
+service_account_info = json.loads(st.secrets["GCP_SERVICE_ACCOUNT"])
+credentials = service_account.Credentials.from_service_account_info(service_account_info)
 
 def fetch_news(api_key, category):
     url = f"https://newsapi.org/v2/top-headlines?category={category}&apiKey={api_key}&country=us"
@@ -32,15 +41,13 @@ def analyze_sentiment(content):
 
 def display_news(articles):
     for idx, article in enumerate(articles):
-        col1, col2 = st.columns([1.5, 3])  # Adjust the column width ratio for larger images
+        col1, col2 = st.columns([1.5, 3])
 
-        # Display article image
         with col1:
             if article.get('urlToImage'):
-                st.image(article['urlToImage'], width=250)  # Increased image size
+                st.image(article['urlToImage'], width=250)
             st.markdown(f"[Read Full Article]({article['url']})")
 
-        # Display article content and sentiment
         with col2:
             st.subheader(article['title'])
             description = article.get('description') or "No description available"
@@ -49,18 +56,15 @@ def display_news(articles):
             sentiment = analyze_sentiment(description)
             st.write(f"**Sentiment**: {sentiment}")
 
-            # Create a unique key for each button using the article index and article title
             convert_button_key = f"convert_button_{idx}_{article['title'][:10].replace(' ', '_')}"
-            # Create a unique key for the selectbox
             language_select_key = f"language_select_{idx}_{article['title'][:10].replace(' ', '_')}"
-            languages = get_supported_languages()  # Fetch supported languages
+            languages = get_supported_languages()
             selected_language = st.selectbox("Select Language", languages, 
                                               index=languages.index("en-US") if "en-US" in languages else 0,
-                                              key=language_select_key)  # Use unique key for selectbox
+                                              key=language_select_key)
 
             if st.button("Convert to Audio", key=convert_button_key):
-                # Convert article description to audio using voice.py
-                gender = texttospeech.SsmlVoiceGender.NEUTRAL  # Specify the voice gender
+                gender = texttospeech.SsmlVoiceGender.NEUTRAL
                 audio_data = audio(description, selected_language, gender)
                 st.audio(audio_data, format='audio/mp3')
 
@@ -76,9 +80,6 @@ def personalized_news(api_key, preferences):
 
 def main():
     st.title("📰 NewsSphere - Your Personalized News Experience")
-
-    # Replace 'your_api_key' with your actual API key or store in Streamlit secrets
-    api_key = '9c364d44f202437fa167782d1d075057'
 
     # Sidebar with category filter
     st.sidebar.header("Select Category")
