@@ -1,12 +1,26 @@
 import os
 from google.cloud import texttospeech
 from io import BytesIO
+import json
+from google.oauth2 import service_account
+import streamlit as st
+from dotenv import load_dotenv
 
-# Set up Google Cloud authentication
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./gcp.json"
+# Load environment variables from .env for local development
+load_dotenv()
+
+# Load Google Cloud credentials from Streamlit secrets or .env file (local)
+if "GCP_SERVICE_ACCOUNT" in st.secrets:
+    # For Streamlit deployment, load credentials from Streamlit secrets
+    service_account_info = json.loads(st.secrets["GCP_SERVICE_ACCOUNT"])
+    credentials = service_account.Credentials.from_service_account_info(service_account_info)
+else:
+    # For local development, load from GOOGLE_APPLICATION_CREDENTIALS set in .env
+    credentials_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+    credentials = service_account.Credentials.from_service_account_file(credentials_path)
 
 # Initialize Google Cloud Text-to-Speech client
-client = texttospeech.TextToSpeechClient()
+client = texttospeech.TextToSpeechClient(credentials=credentials)
 
 def get_supported_languages():
     """Returns a sorted list of supported languages."""
