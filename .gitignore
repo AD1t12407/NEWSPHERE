@@ -8,3 +8,5 @@ gcp.json
 # Python
 __pycache__/
 *.pyc
+.streamlit/secrets.toml
+gcp.json
