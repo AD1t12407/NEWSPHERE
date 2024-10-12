@@ -2,4 +2,9 @@ news
 .env
 gcp.json
 
+# macOS
+.DS_Store
 
+# Python
+__pycache__/
+*.pyc

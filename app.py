@@ -85,6 +85,13 @@ def main():
     st.sidebar.header("Select Category")
     categories = ['business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology']
     selected_category = st.sidebar.selectbox("Select Category", categories)
+    
+    # Show subcategories if 'technology' is selected
+    if selected_category == 'technology':
+        st.sidebar.write("### Select Domain")
+        domains = ['blockchain', 'ai', 'data-science', 'quantum-computing', 'robotics', 'bioinformatics']
+        selected_domain = st.sidebar.selectbox("Select Domain", domains)
+        selected_category = selected_domain  # Update the category to the selected domain
 
     # Option to show personalized news
     personalized = st.sidebar.checkbox("Show Personalized News")

@@ -45,3 +45,4 @@ def audio(text, language, gender):
     """Returns the audio content of the synthesized speech."""
     audio_content = synthesize_text(text, language, gender)
     return BytesIO(audio_content)
+
